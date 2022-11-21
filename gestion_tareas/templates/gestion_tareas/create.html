@@ -5,6 +5,16 @@
 {% block content %}
     <h1>{{title}}</h1>
 
+    <!-- Estilo para error devuelto por FormTarea -->
+    <style>
+        .errorlist {
+            margin-bottom: 0px;
+        }
+    </style>
+
+    <!-- Mensajes Flash -->
+    {% include 'messages/messages.html' %}
+
     <!-- Formulario para crear tareas -->
     <div id="formularioRegistros">
         <div class="card text-bg-light mb-3 border-success">
@@ -22,7 +32,7 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label for="description" class="col-sm-2 col-form-label">Description</label>
+                        <label for="description" class="col-sm-2 col-form-label">Descripción</label>
                         <div class="col-sm-5">
                             <textarea class="form-control" name="description" placeholder="Ingrese descripción" rows=3></textarea>
                         </div>

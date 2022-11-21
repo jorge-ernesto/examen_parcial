@@ -6,6 +6,9 @@
     <h1>{{title}}</h1>
     <hr/>
 
+    <!-- Mensajes Flash -->
+    {% include 'messages/messages.html' %}
+
     <!-- Mensaje al usuario -->
     {% if user.email %}
         <h2>Bienvenido, {{request.user.first_name}} {{user.last_name}}</h2>
