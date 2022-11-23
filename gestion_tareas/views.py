@@ -5,6 +5,10 @@ from gestion_tareas.forms import FormTarea
 
 # Create your views here.
 def index(request):
+    # Validamos autenticacion
+    if not 'usuario' in request.session:
+        return redirect('login')
+
     # Obtenemos tareas
     # tareas = Tarea.objects.all()
 
@@ -17,11 +21,19 @@ def index(request):
     })
 
 def create(request):
+    # Validamos autenticacion
+    if not 'usuario' in request.session:
+        return redirect('login')
+
     return render(request, 'gestion_tareas/create.html', {
         'title': 'Crear Tareas',
     })
 
 def save(request):
+    # Validamos autenticacion
+    if not 'usuario' in request.session:
+        return redirect('login')
+
     # print('POST:', request.POST)
     # exit()
 
@@ -73,6 +85,10 @@ def save(request):
                 return redirect('create_tarea')
 
 def view(request, id):
+    # Validamos autenticacion
+    if not 'usuario' in request.session:
+        return redirect('login')
+
     # Obtenemos tarea
     tarea = Tarea.objects.get(id=id)
 
@@ -82,6 +98,10 @@ def view(request, id):
     })
 
 def delete(request, id):
+    # Validamos autenticacion
+    if not 'usuario' in request.session:
+        return redirect('login')
+
     # Obtenemos tarea
     tarea = Tarea.objects.get(id=id)
 

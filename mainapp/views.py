@@ -11,10 +11,14 @@ def index(request):
     })
 
 def register_page(request):
-    # Mostramos formulario de registro
-    return render(request, 'users/register.html', {
-        'title': 'Registrarse'
-    })
+    # Validamos autenticacion
+    if request.session.get('usuario', False):
+        return redirect('inicio')
+    else:
+        # Mostramos formulario de registro
+        return render(request, 'users/register.html', {
+            'title': 'Registrarse'
+        })
 
 def register_action(request):
     # print('POST:', request.POST)
@@ -68,16 +72,20 @@ def register_action(request):
             try:
                 usuario.save()
                 messages.success(request, 'El usuario se creo correctamente')
-                return redirect('inicio')
+                return redirect('login')
             except Exception as e:
                 messages.warning(request, 'ERROR: ' + str(e))
                 return redirect('register')
 
 def login_page(request):
-    # Mostramos formulario de login
-    return render(request, 'users/login.html', {
-        'title': 'Login'
-    })
+    # Validamos autenticacion
+    if request.session.get('usuario', False):
+        return redirect('inicio')
+    else:
+        # Mostramos formulario de login
+        return render(request, 'users/login.html', {
+            'title': 'Login'
+        })
 
 def login_action(request):
     # print('POST:', request.POST)
