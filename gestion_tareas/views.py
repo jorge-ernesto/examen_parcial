@@ -9,11 +9,11 @@ def index(request):
     if not 'usuario' in request.session:
         return redirect('login')
 
-    # Obtenemos tareas
-    # tareas = Tarea.objects.all()
+    # Obtenemos tareas. Devuelve tuplas. usuario, solo retorna el campo id
+    # tareas = Tarea.objects.values_list('id', 'title', 'created_at', 'usuario')
 
-    # Obtenemos tareas
-    tareas = Tarea.objects.values_list('id', 'title', 'created_at')
+    # Obtenemos tareas. Devuelve objetos. Tambien devuelve objetos relacionados
+    tareas = Tarea.objects.all()
 
     return render(request, 'gestion_tareas/index.html', {
         'title': 'Gestion de Tareas',
@@ -35,6 +35,7 @@ def save(request):
         return redirect('login')
 
     # print('POST:', request.POST)
+    # print(request.session['usuario'])
     # exit()
 
     # Recoger datos del formulario
@@ -45,6 +46,7 @@ def save(request):
             title = request.POST['title'].strip()
             description = request.POST['description'].strip()
             delivery_at = request.POST['delivery_at']
+            usuario_id = request.session['usuario'][0]
 
             # Validacion con Forms Django
             formulario = FormTarea(request.POST)
@@ -72,7 +74,8 @@ def save(request):
             tarea = Tarea(
                 title = title,
                 description = description,
-                delivery_at = delivery_at
+                delivery_at = delivery_at,
+                usuario_id = usuario_id
             )
 
             # Guardamos
