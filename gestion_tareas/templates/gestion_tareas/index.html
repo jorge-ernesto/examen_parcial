@@ -21,6 +21,15 @@
             <div class="card-header">Tareas</div>
             <div class="card-body">
 
+                <!-- Buscador -->
+                <form method="GET" action="{% url 'index_tareas' %}">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="searchtext" placeholder="Usuario" value="">
+                        <button type="submit" class="btn btn-success">Buscar</button>
+                    </div>
+                </form>
+
+                <!-- Tabla -->
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover">
                         <thead>
@@ -48,6 +57,9 @@
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Paginacion -->
+                {% include 'gestion_tareas/pagination.html' %}
 
             </div>
         </div>

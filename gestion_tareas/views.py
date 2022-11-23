@@ -1,7 +1,9 @@
 from django.shortcuts import render, HttpResponse, redirect
+from django.core.paginator import Paginator
 from gestion_tareas.models import Tarea
 from django.contrib import messages
 from gestion_tareas.forms import FormTarea
+from django.db.models import Q
 
 # Create your views here.
 def index(request):
@@ -15,9 +17,27 @@ def index(request):
     # Obtenemos tareas. Devuelve objetos. Tambien devuelve objetos relacionados
     tareas = Tarea.objects.all()
 
+    # Obtenemos tareas con filtro de busqueda.
+    cadena_buscador = ''
+    if request.method == 'GET':
+        if 'searchtext' in request.GET:
+            searchtext = request.GET.get('searchtext').strip()
+            tareas = Tarea.objects.filter( Q(usuario__first_name__contains=searchtext) | Q(usuario__last_name__contains=searchtext) ) # LIKE first_name OR LIKE last_name
+            cadena_buscador = '&searchtext='+searchtext
+
+    # Paginar los articulos
+    paginator = Paginator(tareas, 5)
+
+    # Recoger numero pagina
+    page = request.GET.get('page')
+    page_tareas = paginator.get_page(page)
+
     return render(request, 'gestion_tareas/index.html', {
         'title': 'Gestion de Tareas',
-        'tareas': tareas
+        'tareas': page_tareas,
+        'cantidad_pagina': page_tareas.object_list.count,
+        'cantidad_total': paginator.count,
+        'cadena_buscador': cadena_buscador
     })
 
 def create(request):
