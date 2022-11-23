@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from mainapp.models import Usuario
 from django.contrib import messages
 import hashlib
+from django.contrib.auth import logout
 
 # Create your views here.
 def index(request):
@@ -78,5 +79,51 @@ def login_page(request):
         'title': 'Login'
     })
 
+def login_action(request):
+    # print('POST:', request.POST)
+    # exit()
+
+    # Recoger datos del formulario
+    if request.method == "POST":
+        if 'Login' in request.POST:
+
+            # Recoger datos del formulario
+            username = request.POST['username'].strip()
+            password = request.POST['password'].strip()
+
+            # Cifrar contraseña
+            cifrado = hashlib.sha256()
+            cifrado.update(password.encode('utf8')) # El metodo update recibe un byte
+            password_cifrado = cifrado.hexdigest() # Obtenemos el string hexadecimal del cifrado que genero la libreria
+
+            # Consulta para comprobar credenciales del usuario
+            resultado = Usuario.objects.filter(username=username).values_list('id', 'first_name', 'last_name', 'username', 'password')
+            print('USUARIO:', resultado)
+
+            # Manejo de error
+            try:
+                usuario = resultado[0]
+            except Exception as e:
+                messages.warning(request, 'Login incorrecto!!')
+                return redirect('login')
+
+            if usuario[4] and len(resultado) == 1:
+                # Comprobar la contraseña
+                if password_cifrado == usuario[4]:
+                    # Utilizar una sesión para guardar los datos del usuario logueado
+                    request.session['usuario'] = usuario
+                else:
+                    # Si algo falla enviar una sesión con el fallo
+                    messages.warning(request, 'Login incorrecto!!')
+                    return redirect('login')
+            else:
+                # mensaje de error
+                messages.warning(request, 'Login incorrecto2!!')
+                return redirect('login')
+
+            # Redirigir al inicio
+            return redirect('inicio')
+
 def logout_user(request):
-    return None
+    logout(request)
+    return redirect('login')

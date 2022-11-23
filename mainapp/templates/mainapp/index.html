@@ -9,11 +9,16 @@
     <!-- Mensajes Flash -->
     {% include 'messages/messages.html' %}
 
+    {% comment %}
+        <!-- Prueba de Sessiones -->
+        {{request.session.usuario}}
+    {% endcomment %}
+
     <!-- Mensaje al usuario -->
-    {% if user.email %}
-        <h2>Bienvenido, {{request.user.first_name}} {{user.last_name}}</h2>
+    {% if request.session.usuario %}
+        <h2>Bienvenido, {{request.session.usuario.1}} {{request.session.usuario.2}}</h2>
         <p>
-            {{user.email}}
+            Te autenticaste correctamente.
         </p>
     {% else %}
         <h2>Identificate para ver mas cosas</h2>

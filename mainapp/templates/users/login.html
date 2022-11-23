@@ -11,7 +11,7 @@
         <div class="card-header text-center">{{title}}</div>
         <div class="card-body">
 
-            <form method="POST">
+            <form method="POST" action="{% url 'login_action' %}">
                 {% csrf_token %}
 
                 <div class="row mb-3">
@@ -24,7 +24,7 @@
                 <div class="row mb-3">
                     <label for="password" class="col-sm-2 col-form-label">Contraseña</label>
                     <div class="col-sm-5">
-                        <input type="input" class="form-control" name="password" placeholder="Contraseña">
+                        <input type="password" class="form-control" name="password" placeholder="Contraseña">
                     </div>
                 </div>
 
