@@ -12,7 +12,7 @@ def index(request):
 
 def register_page(request):
     # Validamos autenticacion
-    if request.session.get('usuario', False):
+    if 'usuario' in request.session:
         return redirect('inicio')
     else:
         # Mostramos formulario de registro
@@ -79,7 +79,7 @@ def register_action(request):
 
 def login_page(request):
     # Validamos autenticacion
-    if request.session.get('usuario', False):
+    if 'usuario' in request.session:
         return redirect('inicio')
     else:
         # Mostramos formulario de login
@@ -108,7 +108,7 @@ def login_action(request):
             resultado = Usuario.objects.filter(username=username).values_list('id', 'first_name', 'last_name', 'username', 'password')
             print('USUARIO:', resultado)
 
-            # Manejo de error
+            # Manejo de error, validamos existencia de indice de tupla
             try:
                 usuario = resultado[0]
             except Exception as e:
